@@ -1,0 +1,40 @@
+header {
+    width: 100%;
+    height: 55px;
+    display: flex;
+    justify-content: space-around;
+    background-color: #0a98da;
+    align-items: center;
+    -webkit-box-shadow: 0px 5px 6px -4px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 0px 5px 6px -4px rgba(66, 68, 90, 1);
+    box-shadow: 0px 5px 6px -4px rgba(66, 68, 90, 1);
+}
+
+.namelogo-bar {
+    width: 33.3%;
+    display: flex;
+    justify-content: start;
+}
+.search-bar {
+    width: 33.3%;
+    display: flex;
+    justify-content: center;
+}
+.user-bar {
+    width: 33.3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.username {
+    padding: 3px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.name {
+    padding: 180px;
+    color: #ffffff;
+}

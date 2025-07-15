@@ -1,0 +1,21 @@
+#search {
+    display: flex;
+    align-items: center;
+    width: 500px;
+}
+
+#searchInput {
+    width: 400px;
+    height: 26px;
+    border: solid #8d8a89 1px;
+    border-radius: 5px 0 0 5px;
+    padding-left: 5px;
+    background: #fff;
+    flex-grow: 1;
+    outline: none;
+}
+
+input::placeholder {
+    color: #857e7e;
+    padding-left: 5px;
+}

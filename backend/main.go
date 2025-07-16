@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/auth0/go-jwt-middleware"
 	"github.com/form3tech-oss/jwt-go"
@@ -76,8 +75,10 @@ func main() {
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	r.Handle("/status", StatusHandler).Methods("GET")
-	r.Handle("/get-token", http.HandlerFunc(myhandlers.GetTokenHandler(mySigningKey, db))).Methods("GET")
+	r.Handle("/get-token", http.HandlerFunc(myhandlers.GetTokenHandler(mySigningKey, db))).Methods("POST")
+	r.HandleFunc("/register", myhandlers.RegisterHandler(db, mySigningKey)).Methods("POST")
 	r.Handle("/products", jwtMiddleware.Handler(myhandlers.ProductCardHandler(db))).Methods("GET")
+
 
 	secured := r.PathPrefix("/").Subrouter()
     secured.Use(jwtMiddleware.Handler)
@@ -89,5 +90,11 @@ func main() {
 	secured.HandleFunc("/cart/clear", myhandlers.ClearCartHandler(db)).Methods("DELETE")
 
 	log.Println("Server starting on :3002")
-	http.ListenAndServe(":3002", handlers.LoggingHandler(os.Stdout, r))
+
+	http.ListenAndServe(":3002", handlers.CORS(
+    	handlers.AllowedOrigins([]string{"http://localhost:3000"}),
+    	handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
+    	handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
+    	handlers.AllowCredentials(),
+	)(r))
 }

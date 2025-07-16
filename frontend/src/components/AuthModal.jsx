@@ -14,41 +14,34 @@ export default function AuthModal({ isLogin: initialIsLogin, onClose, onLogin })
         setError('');
 
         try {
-            if (isLogin) {
-                const response = await fetch(
-                    `http://localhost:3002/get-token?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
-                );
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.error || 'Ошибка авторизации');
-                }
+            const url = isLogin ? 'http://localhost:3002/get-token' : 'http://localhost:3002/register';
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(isLogin ? { username, password } : { username, email, password }),
+            });
 
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('username', data.username);
-                onLogin(data.username);
-            } else {
-                const response = await fetch('http://localhost:3002/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, email, password }),
-                });
-
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.error || 'Ошибка регистрации');
-                }
-
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('username', data.username);
-                onLogin(data.username);
+            const responseText = await response.text();
+            
+            if (!responseText.trim()) {
+                throw new Error('Empty response from server');
             }
+
+            const data = JSON.parse(responseText);
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Registration failed');
+            }
+
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('username', data.username);
+            onLogin(data.username);
+            onClose();
         } catch (err) {
-            setError(err.message || 'Произошла ошибка');
-            console.error('Auth error:', err);
+            setError(err.message || 'An error occurred during registration');
+            console.error('Registration error:', err);
         }
     };
 

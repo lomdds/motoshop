@@ -45,29 +45,19 @@ func main() {
 		log.Fatal("Ошибка миграции:", err)
 	}
 
-	// newUser := models.User{
-	// 	Username: "Jack",
-	// 	Email: "Alala@gmail.com",
-	// 	Password: "ololo123",
+	// newProductCard := models.ProductCard{
+	// 	UserID: 1,
+	// 	Brand:   "BMW",
+	// 	BikeModel: "R1200 GS",
+	// 	EngineCapacity: 1200,
+	// 	Power: 186,
+	// 	Color: "White",
+	// 	Price: 1390000,
 	// }
-
-	// if err := db.Create(&newUser).Error; err != nil {
+	
+	// if err := db.Create(&newProductCard).Error; err != nil {
 	// 	log.Fatal(":(")
 	// }
-
-	newProductCard := models.ProductCard{
-		UserID: 1,
-		Brand:   "BMW",
-		BikeModel: "R1200 GS",
-		EngineCapacity: 1200,
-		Power: 186,
-		Color: "White",
-		Price: 1390000,
-	}
-	
-	if err := db.Create(&newProductCard).Error; err != nil {
-		log.Fatal(":(")
-	}
 
 	r := mux.NewRouter()
 
@@ -77,7 +67,7 @@ func main() {
 	r.Handle("/status", StatusHandler).Methods("GET")
 	r.Handle("/get-token", http.HandlerFunc(myhandlers.GetTokenHandler(mySigningKey, db))).Methods("POST")
 	r.HandleFunc("/register", myhandlers.RegisterHandler(db, mySigningKey)).Methods("POST")
-	r.Handle("/products", jwtMiddleware.Handler(myhandlers.ProductCardHandler(db))).Methods("GET")
+	r.Handle("/products", myhandlers.ProductCardHandler(db)).Methods("GET")
 
 
 	secured := r.PathPrefix("/").Subrouter()

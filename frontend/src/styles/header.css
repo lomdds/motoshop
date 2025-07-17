@@ -2,6 +2,7 @@ header {
     width: 100%;
     height: 55px;
     display: flex;
+    z-index: 3;
     justify-content: space-around;
     background-color: #0a98da;
     align-items: center;

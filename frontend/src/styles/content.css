@@ -1,0 +1,8 @@
+.content {
+    padding-top: 70px;
+    width: 100%;
+    background: #f3f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

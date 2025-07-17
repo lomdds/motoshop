@@ -1,0 +1,16 @@
+.not-found {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50rem;
+}
+.textandspiner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.textandspiner h1 {
+    font-size: 45px;
+    padding-bottom: 30px;
+}

@@ -1,5 +1,7 @@
 import Card from "../components/ProductCard"
 import AmogusProgress from "../components/AmogusProgress"
+import CreateModal from "../components/CreateModal"
+import Button from "../components/Button"
 
 import { useCallback, useState, useEffect } from "react"
 
@@ -10,6 +12,7 @@ export default function Catalog() {
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
+    const [openCreateModal, setOpenCreateModal] = useState(false)
 
     const spinner = isLoading ? <AmogusProgress /> : null
 
@@ -21,6 +24,44 @@ export default function Catalog() {
         setProducts(productsData)
         setIsLoading(false)
     }, [])
+
+    const handleCreate = useCallback(async (productsData) => {
+        setOpenCreateModal(false);
+        const token = localStorage.getItem('token');
+        
+    try {
+        const response = await fetch('http://localhost:3002/products', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                Brand: productsData.Brand,
+                BikeModel: productsData.BikeModel,
+                EngineCapacity: Number(productsData.EngineCapacity),
+                Power: Number(productsData.Power),
+                Color: productsData.Color,
+                Price: Number(productsData.Price)
+            })
+        });
+
+        const responseText = await response.text();
+        console.log("Raw response:", responseText);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = responseText ? JSON.parse(responseText) : null;
+        console.log("Карточка создана:", data);
+        getProductsList();
+
+    } catch (error) {
+        console.error("Ошибка при создании:", error);
+    }
+}, [getProductsList]);
+
 
     useEffect(() => {
         getProductsList()
@@ -34,9 +75,13 @@ export default function Catalog() {
     
     return (
         <>
+        <CreateModal open={openCreateModal} onClose={() => setOpenCreateModal(false)} onCreate={handleCreate} />
             <div className="catalog">
                 {spinner || (<>
-                    <div className='catalog'>
+                    <div className="catalog-buttons">
+                        <Button type="addcard" onClick={() => setOpenCreateModal(true)}>+</Button>
+                    </div>
+                    <div className='catalog-cards'>
                         {products.map(item => <Card key={item.id} {...item} refreshCatalog={refreshCatalog} />)}
                     </div>
                 </>)}

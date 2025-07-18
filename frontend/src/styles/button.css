@@ -42,6 +42,7 @@
     color: #fff;
     font-size: 18px;
     font-weight: bold;
+    margin-left: 15px;
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
@@ -68,4 +69,40 @@
 .button.logout:hover {
     background: #0975a7;
     transition: all 0.2s;
+}
+.button.cancel {
+    background: none;
+    border: solid 1px #8d8a89;
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: #8d8a89;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+.button.cancel:hover {
+    background: #e8eeee;
+    transition: all 0.2s;
+}
+
+.button.addcard {
+    z-index: 1;
+    color: #fff;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    font-weight: bold;
+    background: #4d575e;
+    border: none;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+}
+.button.addcard:hover {
+    background: #fff;
+    transition: all 0.2s;
+    color: #4d575e;
+    border: solid 1px #4d575e;
 }

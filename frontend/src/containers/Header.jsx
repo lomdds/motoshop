@@ -6,7 +6,7 @@ import '../styles/header.css';
 
 export default function Header() {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-    const [authMode, setAuthMode] = useState('login'); // 'login' или 'register'
+    const [authMode, setAuthMode] = useState('login');
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
@@ -18,13 +18,16 @@ export default function Header() {
         }
     }, []);
 
-    const handleLogin = (username) => {
+    const handleLogin = (username, user_id) => {
+        localStorage.setItem("username", username);
+        localStorage.setItem("user_id", user_id);
         setUserData({ username });
         setIsAuthModalOpen(false);
     };
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('user_id');
         localStorage.removeItem('username');
         setUserData(null);
     };

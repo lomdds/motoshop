@@ -67,12 +67,16 @@ func main() {
 	r.Handle("/status", StatusHandler).Methods("GET")
 	r.Handle("/get-token", http.HandlerFunc(myhandlers.GetTokenHandler(mySigningKey, db))).Methods("POST")
 	r.HandleFunc("/register", myhandlers.RegisterHandler(db, mySigningKey)).Methods("POST")
+	
 	r.Handle("/products", myhandlers.ProductCardHandler(db)).Methods("GET")
 
 
 	secured := r.PathPrefix("/").Subrouter()
     secured.Use(jwtMiddleware.Handler)
 
+	secured.HandleFunc("/products", myhandlers.CreateProductCardHandler(db)).Methods("POST")
+	secured.HandleFunc("/products/{id}", myhandlers.UpdateProductCardHandler(db)).Methods("PUT")
+	secured.HandleFunc("/products/{id}", myhandlers.DeleteProductCardHandler(db)).Methods("DELETE")
 	secured.HandleFunc("/cart", myhandlers.GetCartHandler(db)).Methods("GET")
     secured.HandleFunc("/cart/add", myhandlers.AddToCartHandler(db)).Methods("POST")
 	secured.HandleFunc("/cart/items/{id}", myhandlers.RemoveFromCartHandler(db)).Methods("DELETE")

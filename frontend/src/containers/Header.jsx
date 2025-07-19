@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from "../components/Button";
 import Search from "../components/Search";
 import AuthModal from "../components/AuthModal";
@@ -9,6 +10,8 @@ export default function Header() {
     const [authMode, setAuthMode] = useState('login');
     const [userData, setUserData] = useState(null);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         const username = localStorage.getItem('username');
@@ -18,11 +21,16 @@ export default function Header() {
         }
     }, []);
 
+    const handleSoftReload = () => {
+        navigate(0);
+    };
+
     const handleLogin = (username, user_id) => {
         localStorage.setItem("username", username);
         localStorage.setItem("user_id", user_id);
         setUserData({ username });
         setIsAuthModalOpen(false);
+        handleSoftReload();
     };
 
     const handleLogout = () => {
@@ -30,6 +38,7 @@ export default function Header() {
         localStorage.removeItem('user_id');
         localStorage.removeItem('username');
         setUserData(null);
+        handleSoftReload();
     };
 
     const openLoginModal = () => {

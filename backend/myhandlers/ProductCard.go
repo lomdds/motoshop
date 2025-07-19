@@ -3,6 +3,8 @@ package myhandlers
 import (
 	"net/http"
 	"encoding/json"
+	"strconv"
+	"log"
 
 	"gorm.io/gorm"
     "github.com/gorilla/mux"
@@ -16,12 +18,19 @@ func ProductCardHandler(db *gorm.DB) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
         var productCards []models.ProductCard
         if err := db.Preload("User").Find(&productCards).Error; err != nil {
+            log.Printf("Error fetching products: %v", err)
             http.Error(w, "Ошибка при получении товаров: " + err.Error(), http.StatusInternalServerError)
             return
         }
 
+        log.Printf("Returning %d product cards", len(productCards))
+        for i, card := range productCards {
+            log.Printf("Card %d: ID=%v, Brand=%s", i, card.ID, card.Brand)
+        }
+
         payload, err := json.Marshal(productCards)
         if err != nil {
+            log.Printf("JSON marshal error: %v", err)
             http.Error(w, "Ошибка при формировании ответа", http.StatusInternalServerError)
             return
         }
@@ -29,7 +38,6 @@ func ProductCardHandler(db *gorm.DB) http.HandlerFunc {
         w.Header().Set("Content-Type", "application/json")
         w.Write(payload)
     }
-
 }
 
 func CreateProductCardHandler(db *gorm.DB) http.HandlerFunc {
@@ -102,21 +110,42 @@ func UpdateProductCardHandler(db *gorm.DB) http.HandlerFunc {
 
 func DeleteProductCardHandler(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("Delete request received. Method: %s, URL: %s", r.Method, r.URL)
+		
 		vars := mux.Vars(r)
-		id := vars["id"]
+		idStr := vars["id"]
+		log.Printf("Received ID: %s", idStr)
 
+		if idStr == "" {
+			log.Println("Empty ID received")
+			http.Error(w, `{"error": "ID карточки не указан"}`, http.StatusBadRequest)
+			return
+		}
+
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			log.Printf("Invalid ID format: %s, error: %v", idStr, err)
+			http.Error(w, `{"error": "Неверный формат ID"}`, http.StatusBadRequest)
+			return
+		}
+
+		log.Printf("Attempting to delete product with ID: %d", id)
+		
 		var productCard models.ProductCard
 		if err := db.First(&productCard, id).Error; err != nil {
-			http.Error(w, "Карточка товара не найдена", http.StatusNotFound)
+			log.Printf("Product not found: %v", err)
+			http.Error(w, `{"error": "Карточка не найдена"}`, http.StatusNotFound)
 			return
 		}
 
 		if err := db.Delete(&productCard).Error; err != nil {
-			http.Error(w, "Ошибка удаления карточки товара: "+err.Error(), http.StatusInternalServerError)
+			log.Printf("Delete error: %v", err)
+			http.Error(w, `{"error": "`+err.Error()+`"}`, http.StatusInternalServerError)
 			return
 		}
 
+		log.Printf("Successfully deleted product with ID: %d", id)
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"message": "Карточка товара успешно удалена"}`))
+		w.Write([]byte(`{"message": "Карточка успешно удалена"}`))
 	}
 }

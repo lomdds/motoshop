@@ -4,6 +4,7 @@ import CreateModal from "../components/CreateModal"
 import Button from "../components/Button"
 
 import { useCallback, useState, useEffect } from "react"
+import { useAuth } from "../helpers/AuthContext"
 
 import "../styles/catalog.css"
 
@@ -11,6 +12,8 @@ import "../styles/catalog.css"
 export default function Catalog() {
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+
+    const { isAuth } = useAuth()
 
     const [openCreateModal, setOpenCreateModal] = useState(false)
 
@@ -78,11 +81,28 @@ export default function Catalog() {
         <CreateModal open={openCreateModal} onClose={() => setOpenCreateModal(false)} onCreate={handleCreate} />
             <div className="catalog">
                 {spinner || (<>
-                    <div className="catalog-buttons">
-                        <Button type="addcard" onClick={() => setOpenCreateModal(true)}>+</Button>
-                    </div>
+                    { isAuth && (
+                        <div className="catalog-buttons">
+                            <Button type="addcard" onClick={() => setOpenCreateModal(true)}>+</Button>
+                        </div>
+                    )}
                     <div className='catalog-cards'>
-                        {products.map(item => <Card key={item.id} {...item} refreshCatalog={refreshCatalog} />)}
+                        {products.map(item => {
+                            console.log("Product item:", item)
+                            return(
+                                <Card
+                                    key={item.ID || item.id} 
+                                    id={item.ID || item.id}
+                                    Brand={item.Brand}
+                                    BikeModel={item.BikeModel}
+                                    EngineCapacity={item.EngineCapacity}
+                                    Power={item.Power}
+                                    Color={item.Color}
+                                    Price={item.Price}
+                                    refreshCatalog={refreshCatalog}
+                                />
+                            )
+                        })}
                     </div>
                 </>)}
             </div>

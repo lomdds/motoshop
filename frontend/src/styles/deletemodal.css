@@ -1,0 +1,9 @@
+#deletemodal {
+    display: flex;
+    flex-direction: column;
+}
+
+#buttons {
+    display: flex;
+    justify-content: flex-end;
+}

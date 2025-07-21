@@ -1,7 +1,7 @@
 import Header from './containers/Header'
 import Content from "./containers/Content"
 
-import { AuthProvider } from './helpers/AuthContext';
+import { AuthProvider } from './hooks/AuthContext';
 
 import './styles/app.css'
 

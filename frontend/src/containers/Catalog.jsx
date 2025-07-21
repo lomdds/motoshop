@@ -4,7 +4,7 @@ import CreateModal from "../components/CreateModal"
 import Button from "../components/Button"
 
 import { useCallback, useState, useEffect } from "react"
-import { useAuth } from "../helpers/AuthContext"
+import { useAuth } from "../hooks/AuthContext"
 
 import "../styles/catalog.css"
 

@@ -1,0 +1,24 @@
+.description {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.description p {
+    padding: 5px 0;
+}
+
+.editmodalinput {
+    width: 380px;
+    margin: 0 auto;
+    padding-left: 6px;
+}
+
+.editbutton {
+    width: 390px;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+}

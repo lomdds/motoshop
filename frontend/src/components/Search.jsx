@@ -2,7 +2,7 @@ import Button from './Button';
 
 import { useCallback } from 'react';
 
-import searchlogo from '../assets/icons8-поиск-30.svg'
+import searchlogo from '../assets/search.svg'
 import '../styles/search.css';
 
 let timeoutID = undefined

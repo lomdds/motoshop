@@ -111,6 +111,46 @@ export default function ProductCard({
         }
     }, [id, refreshCatalog]);
 
+    const handleAddToCart = useCallback(async () => {
+        if (!isAuth) {
+            alert('Войдите в систему, чтобы добавить товар в корзину');
+            return;
+        }
+
+        console.log("Текущий ID товара:", id);
+
+        if (!id) {
+            console.error('ID товара не указан');
+            alert('Ошибка: ID товара не найден');
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:3002/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    product_card_id: id,
+                    quantity: 1,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || 'Ошибка при добавлении в корзину');
+            }
+
+            alert('Товар добавлен в корзину');
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert(error.message);
+        }
+    }, [id, isAuth]);
+
     return (
         <>
             <EditModal 
@@ -135,15 +175,18 @@ export default function ProductCard({
                     <p className="property">Мощность двигателя: {formatNumber(Power, "Л.С.")}</p>
                     <p className="property">Цвет: {Color}</p>
                 </div>
-                <div className="buttonsandprice">
+                <div className="card-price">
+                    <p className="price">{formatNumber(Price, "₽")}</p>
+                </div>
+                <div className="control-buttons">
                     {isAuth && (
-                        <div className="buttons">
+                        <div className="buttons-for-moder">
                             <Button type="delete" onClick={() => setOpenDeleteModal(true)}><img src={trash} alt="удалить" /></Button>
                             <Button type="edit" onClick={() => setOpenEditModal(true)}><img src={edit} alt="изменить" /></Button>
                         </div>
                     )}
-                    <div className="card-price">
-                        <p className="price">{formatNumber(Price, "₽")}</p>
+                    <div className="buttons-for-buyer">
+                        <Button type="buy" onClick={handleAddToCart}>Купить</Button>
                     </div>
                 </div>
             </div>

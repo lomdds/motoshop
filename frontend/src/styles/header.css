@@ -40,4 +40,12 @@ header {
 .name {
     padding: 0 180px;
     color: #ffffff;
+    transition: all 0.1s;
+}
+.name:hover {
+    color: #eeeaea;
+    transition: all 0.1s;
+}
+.link-name {
+    text-decoration: none;
 }

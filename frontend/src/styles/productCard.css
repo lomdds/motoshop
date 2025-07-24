@@ -29,11 +29,12 @@
     font-size: 14px;
 }
 
-.buttonsandprice {
+.buttons-and-price {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    height: 50px;
 }
-.buttons {
+.buttons-for-moder {
     padding: 15px;
     flex: 1 1 auto;
     display: flex;
@@ -59,4 +60,15 @@
     box-shadow: 0px 0px 7px -1px rgba(66, 68, 90, 1);
     transform: scale(1.008);
     transition: all 0.1s;
+}
+.buttons-for-buyer {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+}
+.control-buttons {
+    display: flex;
+    align-items: center;
 }

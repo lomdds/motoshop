@@ -1,8 +1,13 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Button from "../components/Button";
 import Search from "../components/Search";
 import AuthModal from "../components/AuthModal";
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
+
+import carticon from "../assets/cart.svg" 
+
 import '../styles/header.css';
 
 export default function Header() {
@@ -54,7 +59,9 @@ export default function Header() {
     return (
         <header>
             <div className="namelogo-bar">
-                <h2 className="name">Motocycles</h2>
+                <Link className="link-name" to="/products">
+                    <h2 className="name">Motocycles</h2>
+                </Link>
             </div>
             <div className="search-bar">
                 <Search />
@@ -62,7 +69,12 @@ export default function Header() {
             <div className="user-bar">
                 {userData ? (
                     <>
-                        <span className="username">Hello, {userData.username}</span>
+                        <Button type="user-control-button" >
+                            <Link to="/cart">
+                                <img src={carticon} alt='корзина' />
+                            </Link>
+                        </Button>
+                        <span className="username">{userData.username}</span>
                         <Button type='logout' onClick={handleLogout}>Выйти</Button>
                     </>
                 ) : (

@@ -1,5 +1,6 @@
 import Catalog from "./Catalog"
 import NotFound from './NotFound';
+import Cart from "../components/Cart";
 
 import { Routes, Route, useNavigate } from 'react-router-dom'
 
@@ -17,7 +18,8 @@ export default function Header() {
             <main className="content">
                 <Routes>
                     <Route path="products" element={<Catalog />} />
-                    <Route path="notfound" element={<NotFound />} />
+                    <Route path="*" element={<NotFound />} />
+                    <Route path="/cart" element={<Cart />} />
                 </Routes>
             </main>
         </>

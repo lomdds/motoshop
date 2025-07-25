@@ -8,7 +8,7 @@ export default function AuthModal({ isLogin: initialIsLogin, onClose, onLogin })
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-
+ 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -85,10 +85,11 @@ export default function AuthModal({ isLogin: initialIsLogin, onClose, onLogin })
                             required
                         />
                     </div>
-                    
-                    <Button type="submit">
-                        {isLogin ? 'Войти' : 'Зарегистрироваться'}
-                    </Button>
+                    <div className="form-group-button">
+                        <Button type="submit">
+                            {isLogin ? 'Войти' : 'Зарегистрироваться'}
+                        </Button>
+                    </div>
                 </form>
                 
                 <div className="switch-mode">

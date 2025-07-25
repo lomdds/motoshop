@@ -12,7 +12,7 @@
 }
 
 .modal-content {
-    background: white;
+    background: #fff;
     z-index: 1000;
     padding: 2rem;
     border-radius: 8px;
@@ -85,4 +85,9 @@
     color: blue;
     text-decoration: underline;
     cursor: pointer;
+}
+.form-group-button {
+    padding: 4px;
+    display: flex;
+    justify-content: flex-end;
 }

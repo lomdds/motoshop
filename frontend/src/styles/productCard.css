@@ -35,7 +35,7 @@
     height: 50px;
 }
 .buttons-for-moder {
-    padding: 15px;
+    padding-left: 14px;
     flex: 1 1 auto;
     display: flex;
     justify-content: flex-start;
@@ -71,4 +71,5 @@
 .control-buttons {
     display: flex;
     align-items: center;
+    padding-bottom: 8px;
 }

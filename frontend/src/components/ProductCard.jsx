@@ -1,6 +1,7 @@
 import Button from "./Button"
 import EditModal from "./EditModal"
 import DeleteModal from "./DeleteModal"
+import ResponseModal from "./ResponseModal"
 
 import { useCallback, useState } from "react"
 import { useAuth } from "../hooks/AuthContext"
@@ -23,6 +24,9 @@ export default function ProductCard({
 }) {
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
     const [openEditModal, setOpenEditModal] = useState(false)
+
+    const [message, setMessage] = useState("Тестовое сообщение модального окна")
+    const [openResponseModal, setOpenResponseModal] = useState(false)
 
     const { isAuth } = useAuth()
     
@@ -64,13 +68,25 @@ export default function ProductCard({
             }
 
             console.log('Successfully deleted');
-            refreshCatalog();
+            successDeleteResponse();
         } catch (error) {
             console.error('Delete error:', error);
+            failDeleteResponse();
         } finally {
             setOpenDeleteModal(false);
         }
     }, [id, refreshCatalog]);
+
+    const successDeleteResponse = useCallback(() => {
+        console.log("Вызов successDeleteResponse");
+        setMessage("Карточка успешно удалена.");
+        setOpenResponseModal(true);
+    }, [])
+
+    const failDeleteResponse = useCallback(() => {
+        setMessage("Ошибка удаления карточки.");
+        setOpenResponseModal(true);
+    }, [])
     
     const handleEdit = useCallback(async (updatedData) => {
         if (id == null) {
@@ -103,17 +119,30 @@ export default function ProductCard({
             }
 
             console.log('Successfully edited');
-            refreshCatalog();
+            successEditResponse();
         } catch (error) {
             console.error('Edit error:', error);
+            failEditResponse();
         } finally {
             setOpenEditModal(false);
         }
     }, [id, refreshCatalog]);
 
+    const successEditResponse = useCallback(() => {
+        console.log("Вызов successEditResponse");
+        setMessage("Карточка успешно изменена");
+        setOpenResponseModal(true);
+    }, [])
+
+    const failEditResponse = useCallback(() => {
+        setMessage("Ошибка изменения карточки.")
+        setOpenResponseModal(true);
+    }, [])
+
     const handleAddToCart = useCallback(async () => {
         if (!isAuth) {
-            alert('Войдите в систему, чтобы добавить товар в корзину');
+            setMessage("Войдите в систему, чтобы добавить товар в корзину");
+            setOpenResponseModal(true);
             return;
         }
 
@@ -121,7 +150,8 @@ export default function ProductCard({
 
         if (!id) {
             console.error('ID товара не указан');
-            alert('Ошибка: ID товара не найден');
+            setMessage("Ошибка: ID товара не найден");
+            setOpenResponseModal(true);
             return;
         }
 
@@ -144,15 +174,24 @@ export default function ProductCard({
                 throw new Error(errorText || 'Ошибка при добавлении в корзину');
             }
 
-            alert('Товар добавлен в корзину');
+            setMessage("Товар добавлен в корзину");
+            setOpenResponseModal(true);
         } catch (error) {
             console.error('Ошибка:', error);
-            alert(error.message);
+            setMessage(`${error.message}`);
+            setOpenResponseModal(true);
         }
     }, [id, isAuth]);
 
+    const handleCloseResponseModal = useCallback(() => {
+        console.log("Закрытие модалки");
+        setOpenResponseModal(false);
+        refreshCatalog();
+    }, [])
+
     return (
         <>
+            <ResponseModal open={openResponseModal} message={message} onClose={handleCloseResponseModal} />
             <EditModal 
                 open={openEditModal} 
                 onClose={() => setOpenEditModal(false)} 

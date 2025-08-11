@@ -225,7 +225,7 @@ export default function ProductCard({
                         </div>
                     )}
                     <div className="buttons-for-buyer">
-                        <Button type="buy" onClick={handleAddToCart}>Купить</Button>
+                        <Button type="buy" onClick={handleAddToCart}>В корзину</Button>
                     </div>
                 </div>
             </div>

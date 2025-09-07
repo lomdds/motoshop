@@ -8,7 +8,7 @@ import amogus from "../assets/amogus.gif"
 
 import "../styles/content.css"
 
-export default function Header() {
+export default function Content({ searchQuery }) {
     const navigation = useNavigate();
     const spinner = (navigation.state == 'loading') ? <img src={amogus} alt="loading-progress" /> : null
 
@@ -17,7 +17,7 @@ export default function Header() {
             {spinner}
             <main className="content">
                 <Routes>
-                    <Route path="products" element={<Catalog />} />
+                    <Route path="products" element={<Catalog searchQuery={searchQuery} />} />
                     <Route path="*" element={<NotFound />} />
                     <Route path="/cart" element={<Cart />} />
                 </Routes>

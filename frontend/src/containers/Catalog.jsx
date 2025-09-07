@@ -11,10 +11,9 @@ import { useAuth } from "../hooks/AuthContext"
 import "../styles/catalog.css"
 import ResponseModal from "../components/ResponseModal"
 import CatalogFilter from "../components/CatalogFilter"
-import { IoHandLeft } from "react-icons/io5"
 
 
-export default function Catalog() {
+export default function Catalog({ searchQuery = '' }) {
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -66,6 +65,13 @@ export default function Catalog() {
     const spinner = isLoading ? <AmogusProgress /> : null
 
     const filteredProducts = products.filter(product => {
+        // Поиск
+        const searchMatch = 
+            searchQuery === '' ||
+            product.Brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.BikeModel.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.Color.toLowerCase().includes(searchQuery.toLowerCase());
+
         // Фильтр по брендам
         const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(product.Brand);
         
@@ -87,7 +93,7 @@ export default function Catalog() {
         const maxPrice = priceRange.max === '' ? Infinity : priceRange.max;
         const priceMatch = price >= minPrice && price <= maxPrice;
 
-        return brandMatch && engineMatch && powerMatch && priceMatch;
+        return searchMatch && brandMatch && engineMatch && powerMatch && priceMatch;
     });
 
     const getProductsList = useCallback(async () => {

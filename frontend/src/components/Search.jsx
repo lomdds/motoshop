@@ -1,29 +1,22 @@
-import Button from './Button';
-
 import { useCallback } from 'react';
-
-import searchlogo from '../assets/search.svg'
+import Button from './Button';
+import searchlogo from '../assets/search.svg';
 import '../styles/search.css';
 
-let timeoutID = undefined
+let timeoutID = undefined;
 
-export default function Search({ value = '', onSearch, width = '400px', height = '26px'}) {
+export default function Search({ value = '', onSearch, width = '400px', height = '26px' }) {
     const handleInputChange = useCallback((e) => {
-        onSearch(e.target.value)
-        const searchString = e.target.value
+        const searchString = e.target.value;
         clearTimeout(timeoutID);
         timeoutID = setTimeout(() => onSearch(searchString), 300);
-    }, []);
-
-    const confirmSearch = useCallback(() => {
-        onSearch(value)
-    }, [value, onSearch]);
+    }, [onSearch]);
 
     const handleKeyDown = useCallback((e) => {
-        if (e.key == 'enter') {
-            confirmSearch()
+        if (e.key === 'Enter') {
+            onSearch(e.target.value);
         }
-    }, [confirmSearch])
+    }, [onSearch]);
 
     return (
         <div id='search'>
@@ -31,12 +24,13 @@ export default function Search({ value = '', onSearch, width = '400px', height =
                 id='searchInput'
                 placeholder='поиск'
                 type='text'
-                value={value}
+                defaultValue={value}
                 onChange={handleInputChange}
-                onKeyDown={handleKeyDown} />
-            <Button type='search' onClick={confirmSearch}>
+                onKeyDown={handleKeyDown}
+            />
+            {/* <Button type='search' onClick={() => onSearch(document.getElementById('searchInput').value)}>
                 <img className='searchlogo' src={searchlogo} alt='searchlogo' width='20px' />
-            </Button>
+            </Button> */}
         </div>
     );
 }

@@ -10,7 +10,7 @@ import carticon from "../assets/cart.svg"
 
 import '../styles/header.css';
 
-export default function Header() {
+export default function Header({ onSearch }) {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [authMode, setAuthMode] = useState('login');
     const [userData, setUserData] = useState(null);
@@ -64,7 +64,7 @@ export default function Header() {
                 </Link>
             </div>
             <div className="search-bar">
-                <Search />
+                <Search onSearch={onSearch} />
             </div>
             <div className="user-bar">
                 {userData ? (
